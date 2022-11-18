@@ -1,0 +1,5 @@
+---
+gcp:
+  project_id: "Kubernetes"
+gke:
+  
