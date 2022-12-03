@@ -33,7 +33,7 @@ jobs:
         terraform_wrapper: false
     - uses: actions/setup-python@v4 
       with:
-        python-version: '3.9'
+        python-version: '3.x'
         cache: 'pip'
     - name: Install Ansible
       run: pip install ansible-core
