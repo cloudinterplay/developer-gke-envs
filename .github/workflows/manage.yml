@@ -21,7 +21,7 @@ on:
     - 'host_vars/*'
 jobs:
   provision:
-    name: "Manage environment"
+    name: Manage environment
     runs-on: [ self-hosted ]
     steps:
     - name: Check out code
@@ -31,9 +31,12 @@ jobs:
       with:
         terraform_version: 1.3.3
         terraform_wrapper: false
-    - name: Run ansible-lint
-      # replace `main` with any valid ref, or tags like `v6`
-      uses: ansible-community/ansible-lint-action@main
+    - uses: actions/setup-python@v4 
+      with:
+        python-version: '3.9'
+        cache: 'pip'
+    - name: Install Ansible
+      run: pip install ansible-core
     - name: Test
       run: ansible --version
     # - name: Terraform Init
