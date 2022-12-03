@@ -40,3 +40,6 @@ jobs:
     - name: Terraform Init
       run: terraform init -backend-config=config.gcs.tfbackend 
       working-directory: structure/terraform
+    - name: Terraform Plan
+      run: terraform plan -input=false -out plan.out -var-file="terraform.tfvars.json"
+      working-directory: structure/terraform
