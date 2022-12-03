@@ -33,10 +33,10 @@ jobs:
         terraform_wrapper: false
     - name: Install Python 3.8
       run: sudo apt-get install -y python3.8
-    - name: Install Ansible
-      run: pip install ansible-core
-    - name: Test
-      run: ansible --version
+    - name: Install Ansible 2.12
+      run: pip install "ansible-core<=2.12"
+    - name: Generate Terraform vars and Backend
+      run: ansible-playbook -i inventory.yml --limit dev preparing.yml
     # - name: Terraform Init
     #   run: terraform init -backend-config=../../environments/${{ github.event.inputs.environment }}/${{ github.event.inputs.component }}/backend.hcl
     #   working-directory: terraform/${{ github.event.inputs.component }}
