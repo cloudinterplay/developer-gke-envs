@@ -1,0 +1,17 @@
+# Terraform TFVars
+terraform_tfvars:
+  gcp:
+    project_id: "{{ gcp_project_id }}"
+    region: "{{ gcp_region }}"
+  gke:
+    cluster:
+      name: "{{ gke_cluster_name }}"
+      location: "{{ gke_cluster_location }}"
+      initial_node_count: "{{ gke_cluster_initial_node_count }}"
+      ip_allocation_policy: "{{ gke_cluster_ip_allocation_policy }}"
+      network: "{{ gke_cluster_network }}"
+      subnetwork: "{{ gke_cluster_subnetwork }}"
+      master_authorized_networks_config: "{{ gke_cluster_master_authorized_networks_config }}"
+      private_cluster_config: "{{ gke_cluster_private_cluster_config }}"
+      node_config: "{{ gke_cluster_node_config }}"
+      remove_default_node_pool: "{{ gke_cluster_remove_default_node_pool }}"
