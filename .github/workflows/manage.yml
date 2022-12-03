@@ -25,16 +25,14 @@ jobs:
     runs-on: [ self-hosted ]
     steps:
     - name: Check out code
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
     - name: Setup Terraform
       uses: hashicorp/setup-terraform@v1
       with:
         terraform_version: 1.3.3
         terraform_wrapper: false
-    - uses: actions/setup-python@v4 
-      with:
-        python-version: '3.x'
-        cache: 'pip'
+    - name: Install Python
+      run: apt install python3.8
     - name: Install Ansible
       run: pip install ansible-core
     - name: Test
