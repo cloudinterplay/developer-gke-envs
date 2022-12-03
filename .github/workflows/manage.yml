@@ -31,3 +31,11 @@ jobs:
       with:
         terraform_version: 1.3.3
         terraform_wrapper: false
+    - name: Run ansible-lint
+      # replace `main` with any valid ref, or tags like `v6`
+      uses: ansible-community/ansible-lint-action@main
+    - name: Test
+      run: ansible --version
+    # - name: Terraform Init
+    #   run: terraform init -backend-config=../../environments/${{ github.event.inputs.environment }}/${{ github.event.inputs.component }}/backend.hcl
+    #   working-directory: terraform/${{ github.event.inputs.component }}
