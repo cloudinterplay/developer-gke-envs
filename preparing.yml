@@ -1,12 +1,12 @@
 - name: "Prepare configuration"
   hosts: "all"
-  gather_facts: False
+  gather_facts: false
   tasks:
   - name: "Clone Terraform structure"
     ansible.builtin.git:
       repo: "{{ terraform_structure.repo }}"
       version: "{{ terraform_structure.version }}"
-      single_branch: yes
+      single_branch: true
       dest: "structure"
   - name: "Rendering Terraform tfvars file"
     ansible.builtin.copy:

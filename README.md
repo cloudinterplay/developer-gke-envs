@@ -36,6 +36,7 @@ helm repo update
 helm upgrade --install actions-runner-controller actions-runner-controller/actions-runner-controller \
 --namespace actions-runner-system \
 --create-namespace \
+--version 0.21.1 \
 --wait \
 --values .github/arc/values.yml --set "authSecret.github_token=YOUR_PAT"
 ```

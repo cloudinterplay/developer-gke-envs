@@ -13,8 +13,8 @@ gke_cluster_network: "poc-gke"
 gke_cluster_subnetwork: "poc-gke-subnet"
 gke_cluster_master_authorized_networks_config:
   cidr_blocks:
-  - cidr_block: "93.216.69.15/32"
-    display_name: "Home-ISP"
+    - cidr_block: "93.216.69.15/32"
+      display_name: "Home-ISP"
 gke_cluster_private_cluster_config:
   enable_private_endpoint: false
   enable_private_nodes: true
