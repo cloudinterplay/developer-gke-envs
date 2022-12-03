@@ -43,3 +43,11 @@ jobs:
     - name: Terraform Plan
       run: terraform plan -input=false -out plan.out -var-file="terraform.tfvars.json"
       working-directory: structure/terraform
+    - name: Terraform Apply
+      if: github.event.inputs.action == 'apply'
+      run: terraform apply -auto-approve -input=false plan.out
+      working-directory: structure/terraform
+    - name: Terraform Destroy
+      if: github.event.inputs.action == 'destroy'
+      run: terraform destroy -auto-approve -input=false -var-file="terraform.tfvars.json"
+      working-directory: structure/terraform
