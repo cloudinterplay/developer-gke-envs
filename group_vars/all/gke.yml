@@ -5,7 +5,7 @@ gke_project_id: "{{ gcp_project_id }}"
 # Variables related to GKE cluster it-self
 gke_cluster_name: "poc-gke-{{ inventory_hostname }}"
 gke_cluster_location: "us-east1-b"
-gke_cluster_initial_node_count: "1"
+gke_cluster_initial_node_count: "2"
 gke_cluster_ip_allocation_policy:
   cluster_ipv4_cidr_block: "10.1.128.0/18"
   services_ipv4_cidr_block: "10.1.192.0/18"

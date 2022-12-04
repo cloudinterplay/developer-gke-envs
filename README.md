@@ -61,8 +61,28 @@ kubectl -n actions-runner-system patch RunnerDeployment poc-gke-envs --type='jso
 -p='[{"op": "add", "path": "/spec/template/spec/volumes/0", "value":{"name":"gcp-credentials","hostPath":{"path":"/Users/'$LOGNAME'/.config/"}}}]'
 ```
 
+* Check if our runnera are working
+
+```bash
+root@cte-poc-gke-envs:/automation/cloudinterplay/poc-gke-envs# kubectl -n actions-runner-system get pods
+NAME                                         READY   STATUS    RESTARTS   AGE
+actions-runner-controller-77f44ff945-pcfcf   2/2     Running   0          1h
+poc-gke-envs-dzwvb-99vcq                     2/2     Running   0          1h
+poc-gke-envs-dzwvb-mwth5                     2/2     Running   0          1h
+```
+
 * Remove Runner for our env's repository
 
 ```bash
 kubectl -n actions-runner-system delete RunnerDeployment poc-gke-envs
+```
+
+## Check the GKE cluster
+
+When deployment pipeline will be completed we can obtain credentials for the cluster and check the content of it.
+
+```bash
+gcloud auth login
+gcloud config set project ${PROJECT_ID}
+gcloud container clusters get-credentials poc-gke-dev --region=us-east1-b
 ```
