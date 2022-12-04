@@ -21,13 +21,34 @@ on:
     - 'host_vars/*'
 jobs:
   provision:
-    name: "Manage environment"
+    name: Manage environment
     runs-on: [ self-hosted ]
     steps:
     - name: Check out code
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
     - name: Setup Terraform
-      uses: actions/hashicorp-setup-terraform@v1
+      uses: hashicorp/setup-terraform@v1
       with:
         terraform_version: 1.3.3
         terraform_wrapper: false
+    - name: Install Python 3.8
+      run: sudo apt-get install -y python3.8
+    - name: Install Ansible 2.12
+      run: pip install "ansible-core<=2.12"
+    - name: Generate Terraform vars and Backend
+      run: ansible-playbook -i inventory.yml --limit dev preparing.yml
+    - name: Terraform Init
+      run: terraform init -backend-config=config.gcs.tfbackend 
+      working-directory: structure/terraform
+    - name: Terraform Plan
+      if: contains(fromJson('["plan", "apply"]'), github.event.inputs.action)
+      run: terraform plan -input=false -out plan.out -var-file="terraform.tfvars.json"
+      working-directory: structure/terraform
+    - name: Terraform Apply
+      if: github.event.inputs.action == 'apply'
+      run: terraform apply -auto-approve -input=false plan.out
+      working-directory: structure/terraform
+    - name: Terraform Destroy
+      if: github.event.inputs.action == 'destroy'
+      run: terraform destroy -auto-approve -input=false -var-file="terraform.tfvars.json"
+      working-directory: structure/terraform

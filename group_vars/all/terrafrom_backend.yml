@@ -1,5 +1,4 @@
 # Terraform backend
 terraform_backend:
   bucket: "cloudinterplay-poc-gke"
-  prefix: "{{ gke_cluster_name }}/terraform"  
-  
+  prefix: "{{ gke_cluster_name }}/terraform"

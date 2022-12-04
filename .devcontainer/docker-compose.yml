@@ -9,6 +9,7 @@ services:
     volumes:
     - ~/.ssh:/root/.ssh:ro
     - ~/.kube:/root/.kube
+    - ~/.config/gcloud/:/root/.config/gcloud
     - ~/Documents/Automation/:/automation/
     environment:
     - LOGNAME=$LOGNAME
