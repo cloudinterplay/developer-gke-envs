@@ -3,6 +3,18 @@
 In this chapter I'm going to demonstrate how to use resources of your PC in order to deploy your own infrastructure.
 The GKE cluster will be deployed in the GCP.
 
+## Prepare Dev Container
+
+In order to keep Operation System away from any application and packages installation we are going to use development container (so we don't need to install anything on your computer except docker-desktop).
+
+After activating the dev container we need to authenticate our-self against out GCP account
+
+```bash
+gcloud auth application-default login
+```
+
+Now we have an auth token for our GCP account stored in the hidden ".config/gcloud/" folder, which will be used by terraform inside the github runner.
+
 ## Run deploymnet process by Github Action
 
 In order to run our pipelines we will use self-hosted Github Action runners.
