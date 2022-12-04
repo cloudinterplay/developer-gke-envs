@@ -41,6 +41,7 @@ jobs:
       run: terraform init -backend-config=config.gcs.tfbackend 
       working-directory: structure/terraform
     - name: Terraform Plan
+      if: contains(fromJson('["plan", "apply"]'), github.event.inputs.action)
       run: terraform plan -input=false -out plan.out -var-file="terraform.tfvars.json"
       working-directory: structure/terraform
     - name: Terraform Apply
