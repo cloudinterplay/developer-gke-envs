@@ -3,15 +3,33 @@ terraform_tfvars:
   gcp:
     project_id: "{{ gcp_project_id }}"
     region: "{{ gcp_region }}"
+  vpc:
+    network: "{{ vpc.network }}"
+    subnetwork: "{{ vpc.subnetwork }}"
   gke:
-    cluster:
-      name: "{{ gke_cluster_name }}"
-      location: "{{ gke_cluster_location }}"
-      initial_node_count: "{{ gke_cluster_initial_node_count }}"
-      ip_allocation_policy: "{{ gke_cluster_ip_allocation_policy }}"
-      network: "{{ gke_cluster_network }}"
-      subnetwork: "{{ gke_cluster_subnetwork }}"
-      master_authorized_networks_config: "{{ gke_cluster_master_authorized_networks_config }}"
-      private_cluster_config: "{{ gke_cluster_private_cluster_config }}"
-      node_config: "{{ gke_cluster_node_config }}"
-      remove_default_node_pool: "{{ gke_cluster_remove_default_node_pool }}"
+    name: "{{ gke_name }}"
+    description: "GKE Cluster {{ gke_name }}"
+    location: "us-central1-a"
+    cluster_autoscaling:
+      enabled: true
+    ip_allocation_policy:
+      cluster_ipv4_cidr_block: "{{ gke_cluster_ipv4_cidr_block }}"
+      services_ipv4_cidr_block: "{{ gke_services_ipv4_cidr_block }}"
+    private_cluster_config:
+      enable_private_endpoint: false
+      enable_private_nodes: true
+      master_ipv4_cidr_block: "{{ gke_master_ipv4_cidr_block }}"
+    remove_default_node_pool: false
+    node_pools:
+    - name: "nity"
+      machine_type: "e2-micro"
+      autoscaling: true
+      min_count: "1"
+      max_count: "2"
+      disk_size_gb: "10"
+    - name: "Tau"
+      machine_type: "e2-micro"
+      autoscaling: true
+      min_count: "1"
+      max_count: "2"
+      disk_size_gb: "10"
