@@ -21,14 +21,17 @@ terraform_tfvars:
     remove_default_node_pool: false
     node_pools:
     - name: "default-pool"
-      machine_type: "e2-micro"
       autoscaling:        
         min_count: "1"
         max_count: "2"
-      disk_size_gb: "10"
-    - name: "Tau"
-      machine_type: "e2-micro"
+      node_config:
+        machine_type: "e2-micro"
+        disk_size_gb: "10"
+    - name: "tau"
       autoscaling:        
         min_count: "1"
         max_count: "2"
-      disk_size_gb: "10"
+      node_config:
+        machine_type: "t2a-standard-1"
+        disk_size_gb: "10"
+        spot: true
