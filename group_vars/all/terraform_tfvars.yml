@@ -11,11 +11,14 @@ terraform_tfvars:
       name: "{{ gke_name }}"
       description: "GKE Cluster {{ gke_name }}"
       location: "us-central1-a"
+      addons_config:
+        gcp_filestore_csi_driver_config:
+          enabled: true
+      ip_allocation_policy:
+        cluster_ipv4_cidr_block: "{{ gke_cluster_ipv4_cidr_block }}"
+        services_ipv4_cidr_block: "{{ gke_services_ipv4_cidr_block }}"
       node_config:
         enable: true
-    ip_allocation_policy:
-      cluster_ipv4_cidr_block: "{{ gke_cluster_ipv4_cidr_block }}"
-      services_ipv4_cidr_block: "{{ gke_services_ipv4_cidr_block }}"
     private_cluster_config:
       enable_private_endpoint: false
       enable_private_nodes: true
