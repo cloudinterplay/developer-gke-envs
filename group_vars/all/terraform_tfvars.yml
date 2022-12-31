@@ -7,9 +7,12 @@ terraform_tfvars:
     network: "{{ vpc.network }}"
     subnetwork: "{{ vpc.subnetwork }}"
   gke:
-    name: "{{ gke_name }}"
-    description: "GKE Cluster {{ gke_name }}"
-    location: "us-central1-a"
+    cluster:
+      name: "{{ gke_name }}"
+      description: "GKE Cluster {{ gke_name }}"
+      location: "us-central1-a"
+      node_config:
+        enable: true
     ip_allocation_policy:
       cluster_ipv4_cidr_block: "{{ gke_cluster_ipv4_cidr_block }}"
       services_ipv4_cidr_block: "{{ gke_services_ipv4_cidr_block }}"
@@ -17,16 +20,7 @@ terraform_tfvars:
       enable_private_endpoint: false
       enable_private_nodes: true
       master_ipv4_cidr_block: "{{ gke_master_ipv4_cidr_block }}"
-    initial_node_count: 1
-    remove_default_node_pool: false
     node_pools:
-    - name: "default-pool"
-      autoscaling:        
-        min_count: "1"
-        max_count: "2"
-      node_config:
-        machine_type: "e2-micro"
-        disk_size_gb: "10"
     - name: "tau"
       autoscaling:        
         min_count: "1"
@@ -34,4 +28,5 @@ terraform_tfvars:
       node_config:
         machine_type: "t2a-standard-1"
         disk_size_gb: "10"
+        disk_type: "pd-standard"
         spot: true
