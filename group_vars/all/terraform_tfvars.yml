@@ -6,6 +6,7 @@ terraform_tfvars:
   vpc:
     network: "{{ vpc.network }}"
     subnetwork: "{{ vpc.subnetwork }}"
+  argocd: "{{ argocd_tfvars }}"
   gke:
     cluster:
       name: "{{ gke_name }}"
@@ -33,7 +34,7 @@ terraform_tfvars:
         min_count: "1"
         max_count: "2"
       node_config:
-        machine_type: "t2a-standard-1"
+        machine_type: "t2a-standard-2"
         disk_size_gb: "10"
         disk_type: "pd-standard"
         spot: true
