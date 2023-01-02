@@ -1,3 +1,3 @@
 ---
 gcp_project_id: "kubernetes-286419"
-gcp_region: "us-east1"
+gcp_region: "us-central1"

@@ -1,2 +1,3 @@
 ---
 ansible_connection: local
+dns_zone: "cloudinterplay.com"

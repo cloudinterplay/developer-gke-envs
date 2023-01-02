@@ -1,0 +1,47 @@
+---
+# Terraform Vars
+argocd_tfvars:
+  namespace: "argocd"
+  chart:
+    repository: "https://argoproj.github.io/argo-helm"
+    version: "5.16.13"
+    values_files:
+    - helm_values_argocd.yml
+# Auxiliary variables
+argocd_hostname: "{{ 'argocd' if inventory_hostname == 'main' else 'argocd-%s' | format(inventory_hostname) }}"
+default_tolerations:
+- effect: NoSchedule
+  key: kubernetes.io/arch
+  operator: Equal
+  value: arm64
+# Helm Char values
+argocd_helm_values:
+  server:
+    tolerations: "{{ default_tolerations }}"
+    extraArgs:
+      - --insecure
+    ingress:
+      ingressClassName: "gcp"
+      enabled: true
+      # annotations:
+      #   external-dns.alpha.kubernetes.io/hostname: "{{ argocd_hostname }}.{{ dns_zone }}."
+      hosts:
+      - "{{ argocd_hostname }}.{{ dns_zone }}"
+      # tls:
+      # - hosts:
+      #   - "{{ argocd_hostname }}.{{ dns_zone }}"
+      #   secretName: certificate-argocd
+    config:
+      url: "https://{{ argocd_hostname }}.{{dns_zone}}"
+  configs:
+    repositories:
+      poc-gke-argocd-apps:
+        url: https://github.com/cloudinterplay/poc-gke-argocd-apps.git
+  redis:
+    tolerations: "{{ default_tolerations }}"
+  dex:
+    tolerations: "{{ default_tolerations }}"
+  controller:
+    tolerations: "{{ default_tolerations }}"
+  repoServer:
+    tolerations: "{{ default_tolerations }}"
