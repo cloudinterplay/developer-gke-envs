@@ -1,6 +1,11 @@
 - name: "Prepare configuration"
   hosts: "all"
   gather_facts: false
+  vars:
+    # Local development
+    # structure_path_root: "../poc-gke-structure/terraform"
+    # Production
+    structure_path_root: "./structure/terraform"
   tasks:
   - name: "Clone Terraform structure"
     ansible.builtin.git:
@@ -11,14 +16,14 @@
   - name: "Rendering Terraform tfvars file"
     ansible.builtin.copy:
       content: "{{ terraform_tfvars | to_nice_json }}"
-      dest: "./structure/terraform/terraform.tfvars.json"
+      dest: "{{ structure_path_root }}/terraform.tfvars.json"
   - name: "Rendering Terraform backend file"
     ansible.builtin.copy:
       content: |
         bucket = "{{ terraform_backend.bucket }}"
         prefix = "{{ terraform_backend.prefix }}"
-      dest: "./structure/terraform/config.gcs.tfbackend"
-  # - name: "Rendering Argocd helm vlues file"
-  #   ansible.builtin.copy:
-  #     content: "{{ argocd_helm_values | to_nice_yaml }}"
-  #     dest: "../cte-poc-gke-structure/terraform/helm_values_argocd.yml"
+      dest: "{{ structure_path_root }}/config.gcs.tfbackend"
+  - name: "Rendering Argocd helm vlues file"
+    ansible.builtin.copy:
+      content: "{{ argocd_helm_values | to_nice_yaml }}"
+      dest: "{{ structure_path_root }}/helm_values_argocd.yml"
