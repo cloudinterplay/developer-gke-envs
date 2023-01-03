@@ -1,0 +1,17 @@
+---
+# Terraform Vars
+external_dns_tfvars:
+  namespace: "external-dns"
+  chart:
+    repository: "https://kubernetes-sigs.github.io/external-dns"
+    version: "1.12.0"
+    values_files:
+    - helm_values_external_dns.yml
+# Helm Chart values
+external_dns_helm_values:
+  serviceAccount:
+    name: "external-dns"
+  provider: google
+  domainFilters:
+  - "{{ dns_zone }}"
+  tolerations: "{{ default_tolerations }}"

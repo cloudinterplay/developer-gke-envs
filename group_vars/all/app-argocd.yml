@@ -9,22 +9,19 @@ argocd_tfvars:
     - helm_values_argocd.yml
 # Auxiliary variables
 argocd_hostname: "{{ 'argocd' if inventory_hostname == 'main' else 'argocd-%s' | format(inventory_hostname) }}"
-default_tolerations:
-- effect: NoSchedule
-  key: kubernetes.io/arch
-  operator: Equal
-  value: arm64
-# Helm Char values
+# Helm Chart values
 argocd_helm_values:
   server:
     tolerations: "{{ default_tolerations }}"
     extraArgs:
       - --insecure
     ingress:
-      ingressClassName: "gcp"
+      ingressClassName: "nginx-external"
       enabled: true
-      # annotations:
-      #   external-dns.alpha.kubernetes.io/hostname: "{{ argocd_hostname }}.{{ dns_zone }}."
+      annotations:
+        # kubernetes.io/ingress.class: "gce"
+        ingress.gcp.kubernetes.io/pre-shared-cert: 'argocd-server'
+        external-dns.alpha.kubernetes.io/hostname: "{{ argocd_hostname }}.{{ dns_zone }}."
       hosts:
       - "{{ argocd_hostname }}.{{ dns_zone }}"
       # tls:

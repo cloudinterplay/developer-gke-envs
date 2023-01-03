@@ -1,10 +1,10 @@
 version: '3'
 
 services:
-  poc-gke-envs:
+  developer-gke-envs:
     build: .
-    container_name: cte-poc-gke-envs
-    hostname: cte-poc-gke-envs
+    container_name: cte-developer-gke-envs
+    hostname: cte-developer-gke-envs
     user: root
     volumes:
     - ~/.ssh:/root/.ssh:ro
@@ -13,4 +13,5 @@ services:
     - ~/Documents/Automation/:/automation/
     environment:
     - LOGNAME=$LOGNAME
+    - USE_GKE_GCLOUD_AUTH_PLUGIN=True
     command: sleep infinity

@@ -1,4 +1,4 @@
-FROM ubuntu:22.04 AS devcontainer
+FROM ubuntu:22.04 AS developer-gke-envs
 RUN apt-get update && apt-get install apt-transport-https ca-certificates curl git gpg-agent gnupg software-properties-common zip -y \
   && curl https://packages.cloud.google.com/apt/doc/apt-key.gpg > /etc/apt/trusted.gpg.d/cloud.google.gpg \
   && apt-add-repository "deb https://packages.cloud.google.com/apt cloud-sdk main" \

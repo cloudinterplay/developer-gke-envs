@@ -1,7 +1,7 @@
 {
 	"name": "Dev Container",
 	"dockerComposeFile": "docker-compose.yml",
-	"service": "poc-gke-envs",
+	"service": "developer-gke-envs",
 	"workspaceFolder": "/automation",
 
 	// Set *default* container specific settings.json values on container create.
@@ -12,6 +12,7 @@
 
 	// Add the IDs of extensions you want installed when the container is created.
 	"extensions": [
+		"hashicorp.terraform",
 		"hookyqr.beautify",
 		"davidanson.vscode-markdownlint",
 		"christian-kohler.path-intellisense",
