@@ -77,18 +77,22 @@ poc-gke-envs-dzwvb-mwth5                     2/2     Running   0          1h
 kubectl -n actions-runner-system delete RunnerDeployment poc-gke-envs
 ```
 
-## Check the GKE cluster
+## Check the GKE cluster and local development
 
-When deployment pipeline will be completed we can obtain credentials for the cluster and check the content of it.
+In order to be able to run the deployment scripts locally, we needs to be authenticated as an user (not as an application)
 
 ```bash
 gcloud auth login
+```
+
+Next, we need to set the project ID and request credentials for the cluster we've deployed
+
+```bash
 gcloud config set project ${PROJECT_ID}
+gcloud container clusters get-credentials ${CLUSTER_NAME} -z us-central1-a
+```
 
-gcloud container clusters get-credentials poc-gke-dev --region=us-east1-b
-Fetching cluster endpoint and auth data.
-kubeconfig entry generated for poc-gke-dev.
-
+```bash
 kubectl get nodes
 NAME                                         STATUS   ROLES    AGE   VERSION
 gke-poc-gke-dev-default-pool-5e794af1-6qz8   Ready    <none>   12m   v1.22.15-gke.100

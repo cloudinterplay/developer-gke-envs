@@ -7,6 +7,8 @@ terraform_tfvars:
     network: "{{ vpc.network }}"
     subnetwork: "{{ vpc.subnetwork }}"
   argocd: "{{ argocd_tfvars }}"
+  ingress_nginx_external: "{{ ingress_nginx_external_tfvars }}"
+  external_dns: "{{ external_dns_tfvars }}"
   gke:
     cluster:
       name: "{{ gke_name }}"
@@ -22,6 +24,8 @@ terraform_tfvars:
         cidr_blocks:
         - cidr_block: "93.216.69.15/32"
           display_name: "Home"
+        - cidr_block: "213.69.154.75/32"
+          display_name: "Whitehost1"
       private_cluster_config:
         enable_private_endpoint: false
         enable_private_nodes: true
