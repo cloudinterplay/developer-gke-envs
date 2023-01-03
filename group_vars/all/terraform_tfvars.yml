@@ -9,6 +9,8 @@ terraform_tfvars:
   argocd: "{{ argocd_tfvars }}"
   ingress_nginx_external: "{{ ingress_nginx_external_tfvars }}"
   external_dns: "{{ external_dns_tfvars }}"
+  cert_manager: "{{ cert_manager_tfvars }}"
+  clusterIssuers: "{{ cert_manager_clusterIssuers }}"
   gke:
     cluster:
       name: "{{ gke_name }}"

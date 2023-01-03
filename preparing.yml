@@ -34,3 +34,7 @@
     ansible.builtin.copy:
       content: "{{ external_dns_helm_values | to_nice_yaml }}"
       dest: "{{ structure_path }}/helm_values_external_dns.yml"
+  - name: "Rendering cert-manager helm values file"
+    ansible.builtin.copy:
+      content: "{{ cert_manager_helm_values | to_nice_yaml }}"
+      dest: "{{ structure_path }}/helm_values_cert_manager.yml"
