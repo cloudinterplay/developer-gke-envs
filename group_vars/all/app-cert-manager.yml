@@ -1,0 +1,31 @@
+---
+# Terraform Vars
+cert_manager_tfvars:
+  namespace: "cert-manager"
+  chart:
+    repository: "https://charts.jetstack.io"
+    version: "1.10.1"
+    values_files:
+    - helm_values_cert_manager.yml
+# Auxiliary variables
+cert_manager_clusterIssuers:
+  letsencrypt-prod:
+    acmeServer: "https://acme-v02.api.letsencrypt.org/directory"
+    privateKeySecretRefName: "letsencrypt-prod"
+    dnsZone: "{{ dns_zone }}"
+    project: "{{ gcp_project_id }}"
+# Helm Chart values
+cert_manager_helm_values:
+  installCRDs: true
+  ingressShim:
+    defaultIssuerName: "letsencrypt-prod"
+    defaultIssuerKind: "ClusterIssuer"
+  serviceAccount:
+    name: "cert-manager"
+  tolerations: "{{ default_tolerations }}"
+  webhook:
+    tolerations: "{{ default_tolerations }}"
+  cainjector:
+    tolerations: "{{ default_tolerations }}"
+  startupapicheck:
+    tolerations: "{{ default_tolerations }}"

@@ -19,15 +19,15 @@ argocd_helm_values:
       ingressClassName: "nginx-external"
       enabled: true
       annotations:
-        # kubernetes.io/ingress.class: "gce"
+        cert-manager.io/cluster-issuer: "letsencrypt-prod"
         ingress.gcp.kubernetes.io/pre-shared-cert: 'argocd-server'
         external-dns.alpha.kubernetes.io/hostname: "{{ argocd_hostname }}.{{ dns_zone }}."
       hosts:
       - "{{ argocd_hostname }}.{{ dns_zone }}"
-      # tls:
-      # - hosts:
-      #   - "{{ argocd_hostname }}.{{ dns_zone }}"
-      #   secretName: certificate-argocd
+      tls:
+      - hosts:
+        - "{{ argocd_hostname }}.{{ dns_zone }}"
+        secretName: certificate-tls
     config:
       url: "https://{{ argocd_hostname }}.{{dns_zone}}"
   configs:

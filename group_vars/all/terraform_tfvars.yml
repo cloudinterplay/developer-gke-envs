@@ -9,14 +9,16 @@ terraform_tfvars:
   argocd: "{{ argocd_tfvars }}"
   ingress_nginx_external: "{{ ingress_nginx_external_tfvars }}"
   external_dns: "{{ external_dns_tfvars }}"
+  cert_manager: "{{ cert_manager_tfvars }}"
+  clusterIssuers: "{{ cert_manager_clusterIssuers }}"
   gke:
     cluster:
       name: "{{ gke_name }}"
       description: "GKE Cluster {{ gke_name }}"
       location: "us-central1-a"
-      addons_config:
-        gcp_filestore_csi_driver_config:
-          enabled: true
+      # addons_config:
+      #   gcp_filestore_csi_driver_config:
+      #     enabled: false
       ip_allocation_policy:
         cluster_ipv4_cidr_block: "{{ gke_cluster_ipv4_cidr_block }}"
         services_ipv4_cidr_block: "{{ gke_services_ipv4_cidr_block }}"
