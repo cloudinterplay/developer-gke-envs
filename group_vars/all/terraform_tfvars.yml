@@ -24,7 +24,7 @@ terraform_tfvars:
         services_ipv4_cidr_block: "{{ gke_services_ipv4_cidr_block }}"
       master_authorized_networks_config:
         cidr_blocks:
-        - cidr_block: "93.216.69.15/32"
+        - cidr_block: "84.147.61.87/32"
           display_name: "Home"
         - cidr_block: "213.69.154.75/32"
           display_name: "Whitehost1"

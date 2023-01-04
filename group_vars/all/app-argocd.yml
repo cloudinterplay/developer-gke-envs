@@ -11,6 +11,9 @@ argocd_tfvars:
 argocd_hostname: "{{ 'argocd' if inventory_hostname == 'main' else 'argocd-%s' | format(inventory_hostname) }}"
 # Helm Chart values
 argocd_helm_values:
+  applicationSet:
+    tolerations: "{{ default_tolerations }}"
+    enabled: false
   server:
     tolerations: "{{ default_tolerations }}"
     extraArgs:
@@ -20,7 +23,6 @@ argocd_helm_values:
       enabled: true
       annotations:
         cert-manager.io/cluster-issuer: "letsencrypt-prod"
-        ingress.gcp.kubernetes.io/pre-shared-cert: 'argocd-server'
         external-dns.alpha.kubernetes.io/hostname: "{{ argocd_hostname }}.{{ dns_zone }}."
       hosts:
       - "{{ argocd_hostname }}.{{ dns_zone }}"
@@ -39,6 +41,8 @@ argocd_helm_values:
   dex:
     tolerations: "{{ default_tolerations }}"
   controller:
+    tolerations: "{{ default_tolerations }}"
+  notifications:
     tolerations: "{{ default_tolerations }}"
   repoServer:
     tolerations: "{{ default_tolerations }}"
