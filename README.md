@@ -57,7 +57,7 @@ helm upgrade --install actions-runner-controller actions-runner-controller/actio
 
 ```bash
 kubectl -n actions-runner-system apply -f .github/arc/RunnerDeployment.yml
-kubectl -n actions-runner-system patch RunnerDeployment poc-gke-envs --type='json' \
+kubectl -n actions-runner-system patch RunnerDeployment developer-gke-envs --type='json' \
 -p='[{"op": "add", "path": "/spec/template/spec/volumes/0", "value":{"name":"gcp-credentials","hostPath":{"path":"/Users/'$LOGNAME'/.config/"}}}]'
 ```
 

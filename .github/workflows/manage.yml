@@ -36,13 +36,13 @@ jobs:
     - name: Install Ansible 2.12
       run: pip install "ansible-core<=2.12"
     - name: Generate Terraform vars and Backend
-      run: ansible-playbook -i inventory.yml --limit dev preparing.yml
+      run: ansible-playbook -i inventory.yml --limit ${{ github.ref_name }} preparing.yml
     - name: Terraform Init
       run: terraform init -backend-config=config.gcs.tfbackend 
       working-directory: structure/terraform
     - name: Terraform Plan
       if: contains(fromJson('["plan", "apply"]'), github.event.inputs.action)
-      run: terraform plan -input=false -out plan.out -var-file="terraform.tfvars.json"
+      run: terraform plan -input=false -out plan.out -var-file="terraform.tfvars.json" -var="environment_dir=."
       working-directory: structure/terraform
     - name: Terraform Apply
       if: github.event.inputs.action == 'apply'
@@ -50,5 +50,5 @@ jobs:
       working-directory: structure/terraform
     - name: Terraform Destroy
       if: github.event.inputs.action == 'destroy'
-      run: terraform destroy -auto-approve -input=false -var-file="terraform.tfvars.json"
+      run: terraform destroy -auto-approve -input=false -var-file="terraform.tfvars.json" -var="environment_dir=."
       working-directory: structure/terraform
