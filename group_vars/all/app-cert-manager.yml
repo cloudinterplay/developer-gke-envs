@@ -16,6 +16,8 @@ cert_manager_clusterIssuers:
     project: "{{ gcp_project_id }}"
 # Helm Chart values
 cert_manager_helm_values:
+  nodeSelector:
+    kubernetes.io/arch: arm64
   installCRDs: true
   ingressShim:
     defaultIssuerName: "letsencrypt-prod"
