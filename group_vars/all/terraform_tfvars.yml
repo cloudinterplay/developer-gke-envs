@@ -1,0 +1,46 @@
+# Terraform TFVars
+terraform_tfvars:
+  gcp:
+    project_id: "{{ gcp_project_id }}"
+    region: "{{ gcp_region }}"
+  vpc:
+    network: "{{ vpc.network }}"
+    subnetwork: "{{ vpc.subnetwork }}"
+  argocd: "{{ argocd_tfvars }}"
+  ingress_nginx_external: "{{ ingress_nginx_external_tfvars }}"
+  external_dns: "{{ external_dns_tfvars }}"
+  cert_manager: "{{ cert_manager_tfvars }}"
+  clusterIssuers: "{{ cert_manager_clusterIssuers }}"
+  gke:
+    cluster:
+      name: "{{ gke_name }}"
+      description: "GKE Cluster {{ gke_name }}"
+      location: "us-central1-a"
+      # addons_config:
+      #   gcp_filestore_csi_driver_config:
+      #     enabled: false
+      ip_allocation_policy:
+        cluster_ipv4_cidr_block: "{{ gke_cluster_ipv4_cidr_block }}"
+        services_ipv4_cidr_block: "{{ gke_services_ipv4_cidr_block }}"
+      master_authorized_networks_config:
+        cidr_blocks:
+        - cidr_block: "84.147.61.87/32"
+          display_name: "Home"
+        - cidr_block: "213.69.154.75/32"
+          display_name: "Whitehost1"
+      private_cluster_config:
+        enable_private_endpoint: false
+        enable_private_nodes: true
+        master_ipv4_cidr_block: "{{ gke_master_ipv4_cidr_block }}"
+      node_config:
+        enable: true
+    node_pools:
+    - name: "tau"
+      autoscaling:        
+        min_count: "1"
+        max_count: "2"
+      node_config:
+        machine_type: "t2a-standard-2"
+        disk_size_gb: "11"
+        disk_type: "pd-standard"
+        spot: true

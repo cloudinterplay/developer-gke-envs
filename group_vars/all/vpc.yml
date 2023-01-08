@@ -1,0 +1,4 @@
+---
+vpc:
+  network: "poc-gke"
+  subnetwork: "poc-gke-subnet"

@@ -1,0 +1,4 @@
+---
+terraform_structure:
+  repo: "https://github.com/cloudinterplay/developer-gke-structure.git"
+  version: "main"

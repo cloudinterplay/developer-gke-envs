@@ -1,0 +1,17 @@
+version: '3'
+
+services:
+  developer-gke-envs:
+    build: .
+    container_name: cte-developer-gke-envs
+    hostname: cte-developer-gke-envs
+    user: root
+    volumes:
+    - ~/.ssh:/root/.ssh:ro
+    - ~/.kube:/root/.kube
+    - ~/.config/gcloud/:/root/.config/gcloud
+    - ~/Documents/Automation/:/automation/
+    environment:
+    - LOGNAME=$LOGNAME
+    - USE_GKE_GCLOUD_AUTH_PLUGIN=True
+    command: sleep infinity

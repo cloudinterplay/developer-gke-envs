@@ -1,0 +1,7 @@
+---
+# Overridable variables for parameterizing environments
+# Project ID for deploying cluster
+gke_project_id: "{{ gcp_project_id }}"
+# Variables related to GKE cluster it-self
+gke_name: "poc-gke-{{ inventory_hostname }}"
+gke_zone: ["us-central1-b"]

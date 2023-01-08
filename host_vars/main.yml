@@ -1,0 +1,6 @@
+---
+# The ip_allocation_policy
+gke_cluster_ipv4_cidr_block: "10.1.128.0/18"
+gke_services_ipv4_cidr_block: "10.1.192.0/18"
+# master_ipv4_cidr_block
+gke_master_ipv4_cidr_block: "10.1.0.0/28"

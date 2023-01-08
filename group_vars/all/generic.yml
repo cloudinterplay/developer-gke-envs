@@ -1,0 +1,9 @@
+---
+ansible_connection: local
+dns_zone: "cloudinterplay.com"
+# Auxiliary variables
+default_tolerations:
+- effect: NoSchedule
+  key: kubernetes.io/arch
+  operator: Equal
+  value: arm64

@@ -1,0 +1,24 @@
+{
+	"name": "Dev Container",
+	"dockerComposeFile": "docker-compose.yml",
+	"service": "developer-gke-envs",
+	"workspaceFolder": "/automation",
+
+	// Set *default* container specific settings.json values on container create.
+	"settings": {
+		"terminal.integrated.defaultProfile.linux": "/bin/bash",
+		"yaml.format.singleQuote": true
+	},
+
+	// Add the IDs of extensions you want installed when the container is created.
+	"extensions": [
+		"hashicorp.terraform",
+		"hookyqr.beautify",
+		"davidanson.vscode-markdownlint",
+		"christian-kohler.path-intellisense",
+		"redhat.vscode-yaml",
+		"formulahendry.auto-rename-tag",
+		"p1c2u.docker-compose"
+	],
+	"remoteUser": "root"
+}

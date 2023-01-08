@@ -1,0 +1,40 @@
+- name: "Prepare configuration"
+  hosts: "all"
+  gather_facts: false
+  vars:
+    development: false
+    structure_path: "{{ '../developer-gke-structure/terraform' if development else './structure/terraform' }}"
+  tasks:
+  - name: "Clone Terraform structure"
+    ansible.builtin.git:
+      repo: "{{ terraform_structure.repo }}"
+      version: "{{ terraform_structure.version }}"
+      single_branch: true
+      dest: "structure"
+    when: not development
+  - name: "Rendering Terraform tfvars file"
+    ansible.builtin.copy:
+      content: "{{ terraform_tfvars | to_nice_json(indent=2) }}"
+      dest: "{{ structure_path }}/terraform.tfvars.json"
+  - name: "Rendering Terraform backend file"
+    ansible.builtin.copy:
+      content: |
+        bucket = "{{ terraform_backend.bucket }}"
+        prefix = "{{ terraform_backend.prefix }}"
+      dest: "{{ structure_path }}/config.gcs.tfbackend"
+  - name: "Rendering Argocd helm vlues file"
+    ansible.builtin.copy:
+      content: "{{ argocd_helm_values | to_nice_yaml(indent=2) }}"
+      dest: "{{ structure_path }}/helm_values_argocd.yml"
+  - name: "Rendering Nginx Ingress (external) helm values file"
+    ansible.builtin.copy:
+      content: "{{ ingress_nginx_external_helm_values | to_nice_yaml(indent=2) }}"
+      dest: "{{ structure_path }}/helm_values_ingress_nginx_external.yml"
+  - name: "Rendering external-dns helm values file"
+    ansible.builtin.copy:
+      content: "{{ external_dns_helm_values | to_nice_yaml(indent=2) }}"
+      dest: "{{ structure_path }}/helm_values_external_dns.yml"
+  - name: "Rendering cert-manager helm values file"
+    ansible.builtin.copy:
+      content: "{{ cert_manager_helm_values | to_nice_yaml(indent=2) }}"
+      dest: "{{ structure_path }}/helm_values_cert_manager.yml"

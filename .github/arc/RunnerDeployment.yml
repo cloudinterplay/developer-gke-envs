@@ -1,0 +1,37 @@
+---
+apiVersion: actions.summerwind.dev/v1alpha1
+kind: RunnerDeployment
+metadata:
+  name: developer-gke-envs
+spec:
+  replicas: 2
+  template:
+    spec:
+      ephemeral: false
+      repository: cloudinterplay/developer-gke-envs
+      env: []
+      labels:
+      - self-hosted
+      group: default
+      dockerVolumeMounts:
+      - mountPath: /var/lib/docker
+        name: docker
+      volumeMounts:
+      - mountPath: /tmp
+        name: tmp
+      - mountPath: /home/runner/.config
+        name: gcp-credentials
+      volumes:
+      - name: docker
+        emptyDir:
+          medium: Memory
+      - name: work
+        emptyDir:
+          medium: Memory
+      - name: tmp
+        emptyDir:
+          medium: Memory
+      # Example: How to mount own GCP credentials to Runner (Implemented by kubectl patch command)
+      # - name: gcp-credentials
+      #   hostPath:
+      #     path: /Users/$USER_ID$/.config/
