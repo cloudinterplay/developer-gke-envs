@@ -37,6 +37,8 @@ jobs:
       run: pip install "ansible-core<=2.12"
     - name: Generate Terraform vars and Backend
       run: ansible-playbook -i inventory.yml --limit ${{ github.ref_name }} preparing.yml
+      env:
+        ANSIBLE_VERBOSITY: 4
     - name: Terraform Test
       run: ls -l
       working-directory: structure/terraform
