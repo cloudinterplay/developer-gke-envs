@@ -3,7 +3,7 @@
   gather_facts: false
   vars:
     development: false
-    structure_path: "{{ '../developer-gke-structure/terraform' if development else './structure' }}"
+    structure_path: "{{ '../developer-gke-structure/terraform' if development else 'structure' }}"
   tasks:
   - name: "Clone Terraform structure"
     ansible.builtin.git:
