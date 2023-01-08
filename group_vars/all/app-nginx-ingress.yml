@@ -13,6 +13,8 @@ ingress_nginx_external_ClassResource_name: "nginx-external"
 ingress_nginx_external_helm_values:
   controller:
     tolerations: "{{ default_tolerations }}"
+    nodeSelector:
+      kubernetes.io/arch: arm64
     ingressClassResource:
       name: "{{ ingress_nginx_external_ClassResource_name }}"
       controllerValue: "k8s.io/external-ingress-nginx"
@@ -25,5 +27,9 @@ ingress_nginx_external_helm_values:
     admissionWebhooks:
       patch:
         tolerations: "{{ default_tolerations }}"
+        nodeSelector:
+          kubernetes.io/arch: arm64
   defaultBackend:
     tolerations: "{{ default_tolerations }}"
+    nodeSelector:
+      kubernetes.io/arch: arm64

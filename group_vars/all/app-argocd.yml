@@ -12,10 +12,11 @@ argocd_hostname: "{{ 'argocd' if inventory_hostname == 'main' else 'argocd-%s' |
 # Helm Chart values
 argocd_helm_values:
   applicationSet:
-    tolerations: "{{ default_tolerations }}"
     enabled: false
   server:
     tolerations: "{{ default_tolerations }}"
+    nodeSelector:
+      kubernetes.io/arch: arm64
     extraArgs:
       - --insecure
     ingress:
@@ -38,11 +39,21 @@ argocd_helm_values:
         url: https://github.com/cloudinterplay/poc-gke-argocd-apps.git
   redis:
     tolerations: "{{ default_tolerations }}"
+    nodeSelector:
+      kubernetes.io/arch: arm64
   dex:
     tolerations: "{{ default_tolerations }}"
+    nodeSelector:
+      kubernetes.io/arch: arm64
   controller:
     tolerations: "{{ default_tolerations }}"
+    nodeSelector:
+      kubernetes.io/arch: arm64
   notifications:
     tolerations: "{{ default_tolerations }}"
+    nodeSelector:
+      kubernetes.io/arch: arm64
   repoServer:
     tolerations: "{{ default_tolerations }}"
+    nodeSelector:
+      kubernetes.io/arch: arm64

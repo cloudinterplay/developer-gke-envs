@@ -15,3 +15,5 @@ external_dns_helm_values:
   domainFilters:
   - "{{ dns_zone }}"
   tolerations: "{{ default_tolerations }}"
+  nodeSelector:
+    kubernetes.io/arch: arm64
