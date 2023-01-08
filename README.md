@@ -61,6 +61,16 @@ kubectl -n actions-runner-system patch RunnerDeployment developer-gke-envs --typ
 -p='[{"op": "add", "path": "/spec/template/spec/volumes/0", "value":{"name":"gcp-credentials","hostPath":{"path":"/Users/'$LOGNAME'/.config/"}}}]'
 ```
 
+## Install
+
+```bash
+terraform plan -out plan.out \
+  -var="userID=${LOGNAME} \
+  -var="githubRepository=org/repo" \
+  -var="githubToken=YourToken"
+"
+```
+
 * Check if our runnera are working
 
 ```bash
