@@ -44,6 +44,9 @@ jobs:
       working-directory: structure/terraform
     - name: Terraform Test2
       run: ls -l
+    - name: Terraform Test3
+      run: ls -l
+      working-directory: structure
     - name: Terraform Init
       run: terraform init -backend-config=config.gcs.tfbackend 
       working-directory: structure/terraform
