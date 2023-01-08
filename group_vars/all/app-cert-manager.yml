@@ -27,7 +27,13 @@ cert_manager_helm_values:
   tolerations: "{{ default_tolerations }}"
   webhook:
     tolerations: "{{ default_tolerations }}"
+    nodeSelector:
+      kubernetes.io/arch: arm64
   cainjector:
     tolerations: "{{ default_tolerations }}"
+    nodeSelector:
+      kubernetes.io/arch: arm64
   startupapicheck:
     tolerations: "{{ default_tolerations }}"
+    nodeSelector:
+      kubernetes.io/arch: arm64
