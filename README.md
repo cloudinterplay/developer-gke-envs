@@ -3,9 +3,9 @@
 In this chapter I'm going to demonstrate how to use resources of your PC in order to deploy your own infrastructure.
 The GKE cluster will be deployed in the GCP.
 
-## Prepare Dev Container
+## Prepare local dev environment
 
-In order to keep Operation System away from any application and packages installation we are going to use development container (so we don't need to install anything on your computer except docker-desktop).
+First of all we need to have local dev environment be prepared. In order to keep Operation System away from any application and packages installation we are going to use development container (so we don't need to install anything on your computer except docker-desktop).
 
 After activating the dev container we need to authenticate our-self against out GCP account
 
@@ -18,8 +18,10 @@ Now we have an auth token for our GCP account stored in the hidden ".config/gclo
 ## Run deploymnet process by Github Action
 
 In order to run our pipelines we will use self-hosted Github Action runners.
+There are two ways to insall GitHub Action Runner Controller:
 
-### Prepare Github Action Controller
+1. Manual (running helm install command)
+2. Through Terraform
 
 * As a platform for running Github Action we will use Docker Desktop
 * In order to avoid specifing kubernetes context all the time in the commands, let's set default context
@@ -27,6 +29,8 @@ In order to run our pipelines we will use self-hosted Github Action runners.
 ```bash
 kubectl config use-context docker-desktop
 ```
+
+### Install ARC (Manual)
 
 * Cert-manager is the mandatory component for installing the actions-runner-controller (ARC)
 
@@ -55,26 +59,66 @@ helm upgrade --install actions-runner-controller actions-runner-controller/actio
 
 * Add Runner
 
+Manifest .github/arc/RunnerDeployment.yml should be adjusted in advance (repository name needs to be updated accordingly)
+
 ```bash
 kubectl -n actions-runner-system apply -f .github/arc/RunnerDeployment.yml
 kubectl -n actions-runner-system patch RunnerDeployment developer-gke-envs --type='json' \
 -p='[{"op": "add", "path": "/spec/template/spec/volumes/0", "value":{"name":"gcp-credentials","hostPath":{"path":"/Users/'$LOGNAME'/.config/"}}}]'
 ```
 
-* Check if our runnera are working
-
-```bash
-root@cte-poc-gke-envs:/automation/cloudinterplay/poc-gke-envs# kubectl -n actions-runner-system get pods
-NAME                                         READY   STATUS    RESTARTS   AGE
-actions-runner-controller-77f44ff945-pcfcf   2/2     Running   0          1h
-poc-gke-envs-dzwvb-99vcq                     2/2     Running   0          1h
-poc-gke-envs-dzwvb-mwth5                     2/2     Running   0          1h
-```
-
 * Remove Runner for our env's repository
 
 ```bash
 kubectl -n actions-runner-system delete RunnerDeployment poc-gke-envs
+```
+
+* Uninstall ARC
+
+```bash
+kubectl delete ns actions-runner-system cert-manager
+```
+
+### Install ARC (Terraform)
+
+Terraform scripts storred in the "arc" folder
+
+* Terraform init
+
+```bash
+cd arc
+terraform init
+```
+
+* Terraform plan
+
+```bash
+terraform plan -input=false -out plan.out -var="userID=${LOGNAME}"  -var="githubToken=YourToken" -var="githubRepository=org/repo"
+```
+
+* Terraform apply
+
+```bash
+terraform apply -auto-approve -input=false plan.out
+```
+
+* Terraform destroy
+
+```bash
+terraform destroy -var="userID=${LOGNAME}"  -var="githubToken=YourToken" -var="githubRepository=org/repo"
+```
+
+## Check if our runners are working
+
+```bash
+root@cte-developer-gke-envs:/automation/cloudinterplay/developer-gke-structure# kubectl get pod -A 
+NAMESPACE                   NAME                                         READY   STATUS    RESTARTS      AGE
+actions-runner-controller   actions-runner-controller-77f44ff945-x4nrl   2/2     Running   0             69s
+actions-runners             developer-gke-envs-q77c4-fqrsk               2/2     Running   0             66s
+actions-runners             developer-gke-envs-q77c4-zl8fq               2/2     Running   0             66s
+cert-manager                cert-manager-cainjector-9cc6bbc8b-fvb9j      1/1     Running   0             2m32s
+cert-manager                cert-manager-ddd4d6ddf-b7njh                 1/1     Running   0             2m32s
+cert-manager                cert-manager-webhook-678c96cb8f-76sj2        1/1     Running   0             2m32s
 ```
 
 ## Check the GKE cluster and local development
