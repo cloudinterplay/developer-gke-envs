@@ -59,6 +59,8 @@ helm upgrade --install actions-runner-controller actions-runner-controller/actio
 
 * Add Runner
 
+Manifest .github/arc/RunnerDeployment.yml should be adjusted in advance (repository name needs to be updated accordingly)
+
 ```bash
 kubectl -n actions-runner-system apply -f .github/arc/RunnerDeployment.yml
 kubectl -n actions-runner-system patch RunnerDeployment developer-gke-envs --type='json' \
@@ -106,7 +108,7 @@ terraform apply -auto-approve -input=false plan.out
 terraform destroy -var="userID=${LOGNAME}"  -var="githubToken=YourToken" -var="githubRepository=org/repo"
 ```
 
-## Check if our runnera are working
+## Check if our runners are working
 
 ```bash
 root@cte-developer-gke-envs:/automation/cloudinterplay/developer-gke-structure# kubectl get pod -A 
