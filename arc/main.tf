@@ -11,6 +11,10 @@ terraform {
     }
   }
 }
+provider "kubernetes" {
+  config_context = "docker-desktop"
+  config_path    = "~/.kube/config"
+}
 provider "kubectl" {
   config_context = "docker-desktop"
   config_path    = "~/.kube/config"
@@ -21,27 +25,36 @@ provider "helm" {
     config_path    = "~/.kube/config"
   }
 }
+resource "kubernetes_namespace" "cert_manager" {
+  metadata {
+    name = "cert-manager"
+  }
+}
 resource "helm_release" "cert_manager" {
+  depends_on = [kubernetes_namespace.cert_manager]
   chart            = "cert-manager"
   name             = "cert-manager"
-  namespace        = "cert-manager"
+  namespace        = kubernetes_namespace.cert_manager.metadata[0].name
   repository       = "https://charts.jetstack.io"
   version          = "v1.8.0"
-  create_namespace = true
   timeout    = 600
   set {
     name  = "installCRDs"
     value = true
   }
 }
-resource "helm_release" "arc" {
+resource "kubernetes_namespace" "actions_runner_controller" {
+  metadata {
+    name = "actions-runner-controller"
+  }
+}
+resource "helm_release" "actions_runner_controller" {
   depends_on = [helm_release.cert_manager]
   chart      = "actions-runner-controller"
   name       = "actions-runner-controller"
-  namespace  = "actions-runner-system"
+  namespace  = kubernetes_namespace.actions_runner_controller.metadata[0].name
   repository = "https://actions-runner-controller.github.io/actions-runner-controller"
   version    = "0.21.1"
-  create_namespace = true
   timeout    = 600
   set {
     name  = "authSecret.create"
@@ -52,14 +65,20 @@ resource "helm_release" "arc" {
     value = var.githubToken
   }
 }
+resource "kubernetes_namespace" "actions_runners" {
+  depends_on      = [helm_release.actions_runner_controller]
+  metadata {
+    name = "actions-runners"
+  }
+}
 resource "kubectl_manifest" "cert-manager-cluster-issuer" {
-  depends_on      = [helm_release.arc]
+  depends_on      = [kubernetes_namespace.actions_runners]
   validate_schema = false
   yaml_body = <<-YAML
     apiVersion: actions.summerwind.dev/v1alpha1
     kind: RunnerDeployment
     metadata:
-      namespace: actions-runner-system
+      namespace: ${kubernetes_namespace.actions_runners.metadata[0].name}
       name: ${split("/",var.githubRepository)[1]}
     spec:
       replicas: 2
@@ -94,4 +113,3 @@ resource "kubectl_manifest" "cert-manager-cluster-issuer" {
               path: /Users/${var.userID}/.config/
   YAML
 }
-
