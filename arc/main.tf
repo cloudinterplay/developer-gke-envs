@@ -71,7 +71,7 @@ resource "kubernetes_namespace" "actions_runners" {
     name = "actions-runners"
   }
 }
-resource "kubectl_manifest" "cert-manager-cluster-issuer" {
+resource "kubectl_manifest" "runner-deployment" {
   depends_on      = [kubernetes_namespace.actions_runners]
   validate_schema = false
   yaml_body = <<-YAML
