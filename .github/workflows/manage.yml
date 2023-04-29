@@ -96,10 +96,10 @@ jobs:
     - name: Terraform Init
       run: terraform init -backend-config=config.gcs.tfbackend
       working-directory: structure/terraform
-    # - name: Terraform Apply
-    #   if: github.event.inputs.action == 'apply'
-    #   run: terraform apply -auto-approve -input=false plan.out
-    #   working-directory: structure/terraform
+    - name: Terraform Apply
+      if: github.event.inputs.action == 'apply'
+      run: terraform apply -auto-approve -input=false plan.out
+      working-directory: structure/terraform
   destroy:
     if: github.event.inputs.action == 'destroy'
     name: Terrafrom destroy
@@ -123,7 +123,7 @@ jobs:
     - name: Terraform Init
       run: terraform init -backend-config=config.gcs.tfbackend
       working-directory: structure/terraform
-    # - name: Terraform Destroy
-    #   if: github.event.inputs.action == 'destroy'
-    #   run: terraform destroy -auto-approve -input=false -var-file="terraform.tfvars.json" -var="environment_dir=."
-    #   working-directory: structure/terraform
+    - name: Terraform Destroy
+      if: github.event.inputs.action == 'destroy'
+      run: terraform destroy -auto-approve -input=false -var-file="terraform.tfvars.json" -var="environment_dir=."
+      working-directory: structure/terraform
