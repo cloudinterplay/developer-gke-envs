@@ -38,17 +38,26 @@ jobs:
     - name: Generate Terraform vars and Backend
       run: ansible-playbook -i inventory.yml --limit ${{ github.ref_name }} preparing.yml
     - name: Terraform Init
-      run: terraform init -backend-config=config.gcs.tfbackend 
+      run: terraform init -backend-config=config.gcs.tfbackend
       working-directory: structure/terraform
     - name: Terraform Plan
       if: contains(fromJson('["plan", "apply"]'), github.event.inputs.action)
       run: terraform plan -input=false -out plan.out -var-file="terraform.tfvars.json" -var="environment_dir=."
       working-directory: structure/terraform
-    - name: Terraform Apply
-      if: github.event.inputs.action == 'apply'
-      run: terraform apply -auto-approve -input=false plan.out
-      working-directory: structure/terraform
-    - name: Terraform Destroy
-      if: github.event.inputs.action == 'destroy'
-      run: terraform destroy -auto-approve -input=false -var-file="terraform.tfvars.json" -var="environment_dir=."
-      working-directory: structure/terraform
+    - name: Upload artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: terraform-artifacts
+        path: |
+          config.gcs.tfbackend
+          terraform.tfvars.json
+          plan.out
+          terraform/*.yml
+    # - name: Terraform Apply
+    #   if: github.event.inputs.action == 'apply'
+    #   run: terraform apply -auto-approve -input=false plan.out
+    #   working-directory: structure/terraform
+    # - name: Terraform Destroy
+    #   if: github.event.inputs.action == 'destroy'
+    #   run: terraform destroy -auto-approve -input=false -var-file="terraform.tfvars.json" -var="environment_dir=."
+    #   working-directory: structure/terraform
