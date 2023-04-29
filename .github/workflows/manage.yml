@@ -20,8 +20,8 @@ on:
     - 'group_vars/*'
     - 'host_vars/*'
 jobs:
-  provision:
-    name: Manage environment
+  plan:
+    name: Terrafrom plan
     runs-on: [ self-hosted ]
     steps:
     - name: Check out code
@@ -44,7 +44,7 @@ jobs:
       if: contains(fromJson('["plan", "apply"]'), github.event.inputs.action)
       run: terraform plan -input=false -out plan.out -var-file="terraform.tfvars.json" -var="environment_dir=."
       working-directory: structure/terraform
-    - name: Upload artifact
+    - name: Upload artifacts
       uses: actions/upload-artifact@v3
       with:
         name: terraform-artifacts
@@ -55,6 +55,29 @@ jobs:
           structure/terraform/*.yml
           structure/terraform/*.tf
         retention-days: 2
+  apply:
+    name: Terrafrom apply
+    runs-on: [ self-hosted ]
+    needs: plan
+    environment:
+      name: dev
+    steps:
+    - name: Check out code
+      uses: actions/checkout@v3
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v2
+      with:
+        terraform_version: 1.3.3
+        terraform_wrapper: false
+    - name: Download artifacts
+      uses: actions/download-artifact@v3
+      with:
+        name: terraform-artifacts
+        path: structure/terraform
+    - name: Terraform Init
+      run: terraform init -backend-config=config.gcs.tfbackend
+      working-directory: structure/terraform
+
     # - name: Terraform Apply
     #   if: github.event.inputs.action == 'apply'
     #   run: terraform apply -auto-approve -input=false plan.out
