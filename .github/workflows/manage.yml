@@ -71,7 +71,7 @@ jobs:
     - name: Upload artifacts
       uses: actions/upload-artifact@v3
       with:
-        name: terraform-artifacts-plan
+        name: terraform-artifacts
         path: structure/terraform/plan.out
         retention-days: 2
   apply:
