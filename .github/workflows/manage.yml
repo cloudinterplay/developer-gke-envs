@@ -49,10 +49,11 @@ jobs:
       with:
         name: terraform-artifacts
         path: |
-          config.gcs.tfbackend
-          terraform.tfvars.json
-          plan.out
-          terraform/*.yml
+          structure/terraform/config.gcs.tfbackend
+          structure/terraform/terraform.tfvars.json
+          structure/terraform/plan.out
+          structure/terraform/*.yml
+        retention-days: 2
     # - name: Terraform Apply
     #   if: github.event.inputs.action == 'apply'
     #   run: terraform apply -auto-approve -input=false plan.out
