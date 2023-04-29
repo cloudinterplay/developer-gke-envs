@@ -19,6 +19,8 @@ on:
     paths:
     - 'group_vars/*'
     - 'host_vars/*'
+env:
+  TF_IN_AUTOMATION: 'true'
 jobs:
   config:
     name: Generate configuration
