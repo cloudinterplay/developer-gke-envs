@@ -48,11 +48,7 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: terraform-artifacts
-        path: |
-          structure/terraform/config.gcs.tfbackend
-          structure/terraform/terraform.tfvars.json
-          structure/terraform/plan.out
-          structure/terraform/*.yml
+        path: structure/terraform/*
         retention-days: 2
     # - name: Terraform Apply
     #   if: github.event.inputs.action == 'apply'
