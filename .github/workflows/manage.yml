@@ -20,40 +20,59 @@ on:
     - 'group_vars/*'
     - 'host_vars/*'
 jobs:
-  plan:
-    name: Terrafrom plan
+  config:
+    name: Generate configuration
     runs-on: [ self-hosted ]
     steps:
     - name: Check out code
       uses: actions/checkout@v3
-    - name: Setup Terraform
-      uses: hashicorp/setup-terraform@v2
-      with:
-        terraform_version: 1.3.3
-        terraform_wrapper: false
     - name: Install Python 3.8
       run: sudo apt-get install -y python3.8
     - name: Install Ansible 2.12
       run: pip install "ansible-core<=2.12"
     - name: Generate Terraform vars and Backend
       run: ansible-playbook -i inventory.yml --limit ${{ github.ref_name }} preparing.yml
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: terraform-artifacts
+        path: structure/terraform/*
+        retention-days: 2
+  plan:
+    if: contains(fromJson('["plan", "apply"]'), github.event.inputs.action)
+    name: Terrafrom plan
+    runs-on: [ self-hosted ]
+    needs: config
+    steps:
+    - name: Check out code
+      uses: actions/checkout@v3
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v2
+      with:
+        terraform_version: 1.4.4
+        terraform_wrapper: false
+    - name: Download artifacts
+      uses: actions/download-artifact@v3
+      with:
+        name: terraform-artifacts
+        path: structure/terraform
     - name: Terraform Init
       run: terraform init -backend-config=config.gcs.tfbackend
       working-directory: structure/terraform
     - name: Terraform Plan
-      if: contains(fromJson('["plan", "apply"]'), github.event.inputs.action)
       run: terraform plan -input=false -out plan.out -var-file="terraform.tfvars.json" -var="environment_dir=."
       working-directory: structure/terraform
     - name: Upload artifacts
       uses: actions/upload-artifact@v3
       with:
         name: terraform-artifacts
-        path: |
-          structure/terraform/config.gcs.tfbackend
-          structure/terraform/terraform.tfvars.json
-          structure/terraform/plan.out
-          structure/terraform/*.yml
-          structure/terraform/*.tf
+        path: structure/terraform/plan.out
+        retention-days: 2
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: terraform-artifacts-plan
+        path: structure/terraform/plan.out
         retention-days: 2
   apply:
     name: Terrafrom apply
@@ -67,7 +86,7 @@ jobs:
     - name: Setup Terraform
       uses: hashicorp/setup-terraform@v2
       with:
-        terraform_version: 1.3.3
+        terraform_version: 1.4.4
         terraform_wrapper: false
     - name: Download artifacts
       uses: actions/download-artifact@v3
@@ -77,11 +96,33 @@ jobs:
     - name: Terraform Init
       run: terraform init -backend-config=config.gcs.tfbackend
       working-directory: structure/terraform
-
     # - name: Terraform Apply
     #   if: github.event.inputs.action == 'apply'
     #   run: terraform apply -auto-approve -input=false plan.out
     #   working-directory: structure/terraform
+  destroy:
+    if: github.event.inputs.action == 'destroy'
+    name: Terrafrom destroy
+    runs-on: [ self-hosted ]
+    needs: config
+    environment:
+      name: ${{ github.ref_name }}
+    steps:
+    - name: Check out code
+      uses: actions/checkout@v3
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v2
+      with:
+        terraform_version: 1.4.4
+        terraform_wrapper: false
+    - name: Download artifacts
+      uses: actions/download-artifact@v3
+      with:
+        name: terraform-artifacts
+        path: structure/terraform
+    - name: Terraform Init
+      run: terraform init -backend-config=config.gcs.tfbackend
+      working-directory: structure/terraform
     # - name: Terraform Destroy
     #   if: github.event.inputs.action == 'destroy'
     #   run: terraform destroy -auto-approve -input=false -var-file="terraform.tfvars.json" -var="environment_dir=."
