@@ -68,12 +68,6 @@ jobs:
         name: terraform-artifacts
         path: structure/terraform/plan.out
         retention-days: 2
-    - name: Upload artifacts
-      uses: actions/upload-artifact@v3
-      with:
-        name: terraform-artifacts
-        path: structure/terraform/plan.out
-        retention-days: 2
   apply:
     if: github.event.inputs.action == 'apply'
     name: Terrafrom apply
