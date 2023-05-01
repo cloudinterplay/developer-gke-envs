@@ -11,8 +11,6 @@ argocd_tfvars:
 argocd_hostname: "{{ 'argocd' if inventory_hostname == 'main' else 'argocd-%s' | format(inventory_hostname) }}"
 # Helm Chart values
 argocd_helm_values:
-  applicationSet:
-    enabled: false
   server:
     tolerations: "{{ default_tolerations }}"
     nodeSelector:
