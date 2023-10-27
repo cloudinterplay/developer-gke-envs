@@ -19,6 +19,7 @@ jobs:
       name: 'Authenticate to Google Cloud'
       uses: 'google-github-actions/auth@v1'
       with:
-        token_format: 'id_token'
+        token_format: 'access_token'
         workload_identity_provider: 'projects/355514861350/locations/global/workloadIdentityPools/github-actions-pool/providers/github-actions-provider'
         service_account: 'github-actions@355514861350.iam.gserviceaccount.com'
+        access_token_lifetime: '300s'
