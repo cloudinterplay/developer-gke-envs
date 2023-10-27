@@ -33,5 +33,5 @@ jobs:
       uses: google-github-actions/setup-gcloud@v0.6.0
       with:
         project_id: "kubernetes-286419"
-    - name: GCP Projects list
-      run: gcloud projects list
+    - name: GCP billing accounts list
+      run: gcloud billing accounts list
