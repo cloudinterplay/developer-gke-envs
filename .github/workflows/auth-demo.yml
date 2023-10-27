@@ -23,3 +23,9 @@ jobs:
         workload_identity_provider: 'projects/355514861350/locations/global/workloadIdentityPools/github-actions-pool/providers/github-actions-provider'
         service_account: 'github-actions@355514861350.iam.gserviceaccount.com'
         access_token_lifetime: '300s'
+    - name: Login to Google Container Registry
+      uses: docker/login-action@v2
+      with:
+        registry: gcr.io
+        username: oauth2accesstoken
+        password: ${{ steps.auth.outputs.access_token }}
