@@ -33,5 +33,7 @@ jobs:
       uses: google-github-actions/setup-gcloud@v0.6.0
       with:
         project_id: "355514861350"
-    - name: Install additional dependencies
+    - name: IAM service-accounts list
       run: gcloud iam service-accounts list
+      env:
+        CLOUDSDK_CORE_PROJECT: "355514861350"
