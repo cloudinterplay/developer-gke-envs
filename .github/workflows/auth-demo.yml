@@ -31,5 +31,7 @@ jobs:
         password: ${{ steps.auth.outputs.access_token }}
     - name: Setup gcloud CLI
       uses: google-github-actions/setup-gcloud@v0.6.0
+      with:
+        project_id: "355514861350"
     - name: Install additional dependencies
       run: gcloud iam service-accounts list
