@@ -1,0 +1,24 @@
+---
+name: "GCP auth demo"
+defaults:
+  run:
+    shell: bash
+on:
+  workflow_dispatch:
+jobs:
+  demo:
+    name: Demo
+    permissions:
+      id-token: 'write'
+      contents: 'read'
+    runs-on: 'ubuntu-latest'
+    steps:
+    - name: Check out code
+      uses: actions/checkout@v3
+    - id: 'auth'
+      name: 'Authenticate to Google Cloud'
+      uses: 'google-github-actions/auth@v1'
+      with:
+        token_format: 'id_token'
+        workload_identity_provider: 'projects/355514861350/locations/global/workloadIdentityPools/github-actions-pool/providers/github-actions-provider'
+        service_account: 'github-actions@355514861350.iam.gserviceaccount.com'
