@@ -3,8 +3,8 @@ version: '3'
 services:
   developer-gke-envs:
     build: .
-    container_name: cte-developer-gke-envs
-    hostname: cte-developer-gke-envs
+    container_name: developer-gke-envs
+    hostname: developer-gke-envs
     user: root
     volumes:
     - ~/.ssh:/root/.ssh:ro
